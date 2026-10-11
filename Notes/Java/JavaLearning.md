@@ -776,9 +776,9 @@ HelloApplication
 
 ## 启蒙篇 Part1
 
-1. ![Hello World From Terminal!](../../Notes/Images/1.png)
+1. ![Hello World From Terminal!](../Notes/Images/1.png)
 
-2. ![Hello World From Web Application](../../Notes/Images/2.png)
+2. ![Hello World From Web Application](../Notes/Images/2.png)
 
 ---
 
