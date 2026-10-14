@@ -167,6 +167,8 @@ Spring Initializr 是一个帮助快速创建 Spring Boot 项目的工具。
 
 Spring Boot 是基于 Spring 生态的 Java 后端开发框架。
 
+    负责搭建后端应用
+    启动服务器、接收 HTTP 请求、组织各个组件。
 ---
 
 ## 七、HelloApplication
