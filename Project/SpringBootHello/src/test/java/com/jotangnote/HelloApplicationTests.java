@@ -1,9 +1,9 @@
-package hello;
+package com.jotangnote;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(properties = "mimo.api.key=test-only-key")
 class HelloApplicationTests {
 
 	@Test

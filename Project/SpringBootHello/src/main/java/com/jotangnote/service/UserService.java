@@ -40,4 +40,8 @@ public class UserService {
 
         return user;
     }
+
+    public User findById(Long id) {
+        return userMapper.findById(id);
+    }
 }

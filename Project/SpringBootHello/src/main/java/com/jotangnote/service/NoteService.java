@@ -8,6 +8,8 @@ import com.jotangnote.mapper.NoteMapper;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NoteService {
 
@@ -86,5 +88,17 @@ public class NoteService {
         }
 
         return result;
+    }
+
+    public List<Note> getNotesByUserId(
+            Long userId,
+            long offset,
+            int size
+    ) {
+        return noteMapper.findByUserId(userId, offset, size);
+    }
+
+    public long countNotesByUserId(Long userId) {
+        return noteMapper.countByUserId(userId);
     }
 }

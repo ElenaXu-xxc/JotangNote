@@ -11,14 +11,22 @@ import org.springframework.web.bind.annotation.GetMapping; // 用于把 Java 方
 import org.springframework.web.bind.annotation.PathVariable; // 用于读取 URL 路径中的变量，例如从 /notes/1 中取出 1
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping; // PutMapping是Spring Boot 提供的注解，用于处理 HTTP 的 PUT 请求。我们用它来表示修改一篇已经存在的笔记
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import com.jotangnote.message.NoteMessage; // NoteMessage：封装笔记操作的消息对象，包含操作类型、笔记内容、用户 ID 等信息。
 import com.jotangnote.message.NoteMessageProducer; // NoteMessageProducer：负责发送消息到 RabbitMQ 的生产者类。
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("/notes")
 public class NoteController {
+
+    private static final int DEFAULT_PAGE = 1;
+    private static final int DEFAULT_SIZE = 10;
+    private static final int MAX_SIZE = 100;
 
     private final NoteService noteService;
     private final NoteMessageProducer noteMessageProducer; // 声明一个消息生产者变量，让Controller可以使用它发送消息。
@@ -31,6 +39,44 @@ public class NoteController {
         this.noteService = noteService;
         this.noteMessageProducer = noteMessageProducer; // 把注入的对象保存下来，共三个接口调用。
     }
+
+    // 获取当前登录用户的笔记列表
+    @GetMapping
+    public NoteListResponse getNotes(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            HttpSession session
+    ) {
+        Long userId = getCurrentUserId(session);
+        int normalizedPage = page < 1 ? DEFAULT_PAGE : page;
+        int normalizedSize = size < 1 ? DEFAULT_SIZE : Math.min(size, MAX_SIZE);
+        long offset = (long) (normalizedPage - 1) * normalizedSize;
+
+        List<NoteItemResponse> notes = noteService
+                .getNotesByUserId(userId, offset, normalizedSize)
+                .stream()
+                .map(note -> new NoteItemResponse(
+                        note.getId(),
+                        note.getTitle(),
+                        note.getContent(),
+                        note.getCreatedAt(),
+                        note.getUpdatedAt()
+                ))
+                .toList();
+        long total = noteService.countNotesByUserId(userId);
+        int totalPages = total == 0
+                ? 0
+                : (int) ((total + normalizedSize - 1) / normalizedSize);
+
+        return new NoteListResponse(
+                notes,
+                normalizedPage,
+                normalizedSize,
+                total,
+                totalPages
+        );
+    }
+
     // 获取当前登录用户    
     private Long getCurrentUserId(HttpSession session) {
         Object userId = session.getAttribute("userId"); // session.getAttribute("userId")：从服务器保存的登录 Session 中获取用户 ID。
@@ -104,4 +150,22 @@ public class NoteController {
 
         return "笔记修改任务已提交";
         }
+
+    public record NoteListResponse(
+            List<NoteItemResponse> notes,
+            int page,
+            int size,
+            long total,
+            int totalPages
+    ) {
+    }
+
+    public record NoteItemResponse(
+            Long id,
+            String title,
+            String content,
+            LocalDateTime createdAt,
+            LocalDateTime updatedAt
+    ) {
+    }
 }

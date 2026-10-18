@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import org.apache.ibatis.annotations.Param; // @Param 用于给 SQL 参数指定明确的名称。尤其是一个方法有多个参数时，写清楚名称可以避免 MyBatis 无法正确对应参数。
 
+import java.util.List;
+
 @Mapper
 public interface NoteMapper {
 
@@ -30,4 +32,19 @@ public interface NoteMapper {
     @Update("UPDATE notes SET title = #{title}, content = #{content} " +
             "WHERE id = #{id} AND user_id = #{userId} AND is_deleted = 0")
     int update(Note note);
+
+    @Select("SELECT id, title, content, created_at AS createdAt, " +
+            "updated_at AS updatedAt, is_deleted AS isDeleted " +
+            "FROM notes WHERE user_id = #{userId} AND is_deleted = 0 " +
+            "ORDER BY created_at DESC, id DESC " +
+            "LIMIT #{size} OFFSET #{offset}")
+    List<Note> findByUserId(
+            @Param("userId") Long userId,
+            @Param("offset") long offset,
+            @Param("size") int size
+    );
+
+    @Select("SELECT COUNT(*) FROM notes " +
+            "WHERE user_id = #{userId} AND is_deleted = 0")
+    long countByUserId(@Param("userId") Long userId);
         }

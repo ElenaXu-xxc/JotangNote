@@ -241,7 +241,7 @@ curl -i -b cookies.txt \
 ```
 
 随后查询 MySQL，确认新增笔记已经保存。
-`Images/rabbitmq-create-test.png`
+![](Images/rabbitmq-create-test.png)
 
 ### 4.4 异步修改笔记测试
 
@@ -254,7 +254,7 @@ curl -i -b cookies.txt \
 ```
 
 等待后台消费者处理后，再次调用查询接口，确认标题和正文已经更新。
-`Images/rabbitmq-update-test.png`
+![](Images/rabbitmq-update-test.png)
 
 ### 4.5 异步删除笔记测试
 
@@ -275,7 +275,7 @@ is_deleted = 1
 ```
 
 该字段变为 `1` 表示笔记被软删除，数据库记录仍然保留。
-`Images/rabbitmq-delete-test.png`
+![](Images/rabbitmq-delete-test.png)
 
 ## 五、实践总结
 

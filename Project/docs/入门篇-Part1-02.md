@@ -140,7 +140,7 @@ WHERE id = #{id}
 
 预期结果：新用户注册成功，重复用户名不能注册。
 
-截图（输入下一个指令前有显示“注册成功”）：`Images/user-auth/register-success.png`
+![输入下一个指令前有显示“注册成功”](Images/user-auth/register-success.png)
 
 ### 4.2 用户登录
 
@@ -164,7 +164,7 @@ WHERE id = #{id}
 
 预期结果：正确的账号密码可以登录，错误的账号密码不能通过验证。
 
-截图（输入下一个指令前有显示“登录成功”）：`Images/user-auth/login-success.png`
+![输入下一个指令前有显示“登录成功”](Images/user-auth/login-success.png)
 
 ### 4.3 未登录用户创建笔记
 
@@ -174,7 +174,7 @@ WHERE id = #{id}
 
 测试结果：服务器返回 HTTP `401 Unauthorized`，拒绝未登录用户创建笔记。
 
-截图：`Images/note-permissions/unauthenticated-create.png`
+![](Images/note-permissions/unauthenticated-create.png)
 
 ### 4.4 Alice 创建自己的笔记
 
@@ -182,7 +182,7 @@ WHERE id = #{id}
 
 测试结果：笔记创建成功，数据库中对应记录的 `user_id` 为 Alice 的用户 ID。本次测试记录中，笔记 ID 为 `4`，用户 ID 为 `1`。
 
-截图：`Images/note-permissions/create-own-note.png`
+![](Images/note-permissions/create-own-note.png)
 
 ### 4.5 Bob 尝试修改 Alice 的笔记
 
@@ -190,7 +190,7 @@ WHERE id = #{id}
 
 测试结果：服务器拒绝 Bob 的修改请求，提示笔记不存在、已删除或无权修改。
 
-截图：`Images/note-permissions/reject-other-user-update.png`
+![](Images/note-permissions/reject-other-user-update.png)
 
 ### 4.6 Bob 尝试删除 Alice 的笔记
 
@@ -198,7 +198,7 @@ WHERE id = #{id}
 
 测试结果：在确认 Bob 的登录会话有效后，服务器拒绝删除操作，笔记仍然保留。
 
-截图：`Images/note-permissions/reject-other-user-delete.png`
+![](Images/note-permissions/reject-other-user-delete.png)
 
 ### 4.7 Alice 修改自己的笔记
 
@@ -206,7 +206,7 @@ WHERE id = #{id}
 
 测试结果：服务器返回修改成功。数据库记录显示标题已经更新，`user_id` 仍为 `1`，`is_deleted` 仍为 `0`。
 
-截图：`Images/note-permissions/owner-update-success.png`
+![](Images/note-permissions/owner-update-success.png)
 
 ### 4.8 数据库验证
 
@@ -225,7 +225,7 @@ WHERE id = 4;
 - Alice 可以修改自己的笔记。
 - 笔记仍处于未删除状态。
 
-截图：`Images/note-permissions/verify-owner-unchanged.png`
+![](Images/note-permissions/verify-owner-unchanged.png)
 
 ## 五、测试总结
 
